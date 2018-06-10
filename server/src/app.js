@@ -22,8 +22,12 @@ app.use(bodyParser.json())
 app.use(cors())
 
 app.get('/events', (req, res) => {
-    db.ref('/events').on("value",(snapshot) => {
-      res.send(snapshot.val());
+    db.ref('/events').orderByChild("date").on("value",(snapshot) => {
+      var obj = [];
+      snapshot.forEach(function(child) {
+        obj.push(child.val());
+      });
+      res.send(obj);
     });
 });
 
